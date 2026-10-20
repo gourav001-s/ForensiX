@@ -1,0 +1,32 @@
+Analysis for Generated Images:
+Model                    |  Image Count | Total Size (MB) | Most Common Resolution   
+----------------------------------------------------------------------------------
+DFGAN                    |           48 |           5.32 | 256x256 (48 images)      
+FLUX-dev                 |          227 |          71.34 | 512x512 (227 images)     
+GALIP                    |           43 |           3.48 | 224x224 (43 images)      
+Hourglass_imagenet       |           65 |           6.43 | 256x256 (65 images)      
+IdeogramV2               |          500 |         757.31 | 1024x1024 (500 images)   
+Imagen3                  |          361 |         491.71 | 1024x1024 (361 images)   
+kandinsky_2_2            |          334 |         284.43 | 768x768 (334 images)     
+kvikontent_midjourney_v6 |          200 |          94.06 | 512x512 (200 images)     
+LCM_lora_sdv15           |          132 |          44.58 | 512x512 (132 images)     
+LCM_lora_sdxl            |          446 |         769.37 | 1024x1024 (446 images)   
+LCM_lora_ssd1b           |          394 |         619.21 | 1024x1024 (394 images)   
+MidjourneyV5_2           |          926 |        1358.87 | 1024x1024 (926 images)   
+stable_cascade           |          337 |         492.69 | 1024x1024 (337 images)   
+
+Analysis for Real Images:
+Model                    |  Image Count | Total Size (MB) | Most Common Resolution   
+----------------------------------------------------------------------------------
+DFGAN                    |          220 |          35.35 | 640x480 (37 images)      
+GALIP                    |          205 |          33.13 | 640x480 (67 images)      
+Hourglass_imagenet       |          218 |          34.10 | 640x480 (42 images)      
+IdeogramV2               |          221 |          36.63 | 640x480 (49 images)      
+Imagen3                  |          227 |          36.97 | 640x480 (44 images)      
+kandinsky_2_2            |          186 |          29.59 | 640x480 (45 images)      
+kvikontent_midjourney_v6 |          205 |          32.81 | 640x480 (50 images)      
+LCM_lora_sdv15           |          221 |          36.33 | 640x480 (47 images)      
+LCM_lora_sdxl            |          210 |          33.64 | 640x480 (50 images)      
+LCM_lora_ssd1b           |          206 |          32.41 | 640x480 (51 images)      
+MidjourneyV5_2           |          435 |          69.15 | 640x480 (95 images)      
+stable_cascade           |          211 |          33.93 | 640x480 (43 images)   

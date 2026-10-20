@@ -1,0 +1,11 @@
+{
+  "quantization": {
+    "int8": "onnxruntime dynamic quantization, QInt8",
+    "uint8": "onnxruntime dynamic quantization, QUInt8",
+    "quantized": "copy of int8 for compatibility",
+    "q4": "MatMulNBitsQuantizer, bits=4, block_size=32, symmetric"
+  },
+  "export_tool": "optimum-cli export onnx",
+  "export_task": "image-classification",
+  "onnx_version": "v1.1"
+}

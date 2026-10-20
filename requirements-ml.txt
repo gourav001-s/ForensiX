@@ -1,0 +1,17 @@
+# Optional: local ML classifier
+onnxruntime>=1.17
+huggingface_hub>=0.23
+# Only needed for models WITHOUT an ONNX file (PyTorch backend). Large download:
+# torch
+# transformers>=4.40
+
+# C2PA Content Credentials verification (real cryptographic signature check, no API)
+c2pa-python>=0.12
+
+# MediaPipe face-landmark detection (rotation-aware faces, eye/mouth region checks)
+mediapipe>=0.10.14
+
+# Reality Defender external "second opinion" API (opt-in, sends the image to their
+# cloud). Free tier: 50 image/audio scans/month. Needs REALITY_DEFENDER_API_KEY set --
+# see .env.example and second_opinion.py.
+realitydefender

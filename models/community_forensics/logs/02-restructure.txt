@@ -1,0 +1,33 @@
+Original folder structure:
+
+EvalSet
+│
+├── modelA
+│   ├── generated
+│   │   └── image1.png
+│   └── real
+│       └── image2.png
+│
+└── modelB
+    ├── generated
+    │   └── image3.png
+    └── real
+        └── image4.png
+
+Restructured to:
+
+resampledEvalSet
+│
+├── modelA
+│   └── image1.png
+│
+└── modelB
+    └── image3.png
+│
+realImages
+│
+├── modelA
+│   └── image2.png
+│
+└── modelB
+    └── image4.png

@@ -1,0 +1,122 @@
+Deepfake & Image Forensics Toolkit v3.1
+=======================================
+
+Developer: Gourav Shrivastava
+Year: 2025-2026
+
+Overview
+--------
+A local, offline web tool that inspects images for signs of manipulation,
+AI generation (deepfakes), hidden data and metadata anomalies. No API key,
+no cloud upload, no ML model download.
+
+Detection modules (forensics.py)
+--------------------------------
+1. Metadata / provenance : AI generator markers, C2PA/IPTC "trainedAlgorithmicMedia",
+                           PNG prompt chunks, editor software, timestamp mismatch
+2. Face consistency      : face vs background sharpness, noise and compression ratios
+3. Error Level Analysis  : localized recompression differences (splicing)
+4. Noise residual map    : sensor-noise uniformity, denoised/synthetic regions
+5. FFT spectrum          : periodic upsampling artifacts typical of GAN/diffusion output
+6. Copy-move detection   : cloned regions via ORB keypoint vector clustering
+7. JPEG analysis         : quantization quality estimate, double-compression hint
+8. LSB steganography     : bit-plane statistics and chi-square pair test
+9. File structure        : real type vs extension, data appended after EOF
+10. Hashes               : MD5, SHA1, SHA256, pHash, aHash, dHash, wHash
+11. C2PA verification    : real cryptographic signature check (c2pa_verify.py) -- detects tampering after
+                           signing, checks signer trust, reads declared AI-generation and edit actions.
+                           Optional: pip install c2pa-python. Degrades cleanly when absent.
+12. Local ML classifier   : offline ONNX / PyTorch models from ./models (mlclassifier.py), face-crop + full-image
+                           scoring, flip TTA, multi-model averaging, disagreement warning
+12. Optional CLI tools   : file, strings, exiftool, binwalk, steghide, zsteg (auto-skipped if missing)
+
+Output: 0-100 risk score with per-module breakdown and plain-language reasons,
+JSON export, printable report, case history and two-case comparison.
+
+Evaluation and calibration (evaluate.py)
+----------------------------------------
+  python3 evaluate.py --data dataset            # AUC, recall at fixed FPR, per-module and per-generator tables
+  python3 evaluate.py --data dataset --apply    # cross-validated calibration -> calibration.json
+  python3 evaluate.py --selftest                # pipeline smoke test (synthetic data)
+  python3 evaluate.py --reset-calibration       # back to the hand-tuned heuristic
+  See DATASET_GUIDE.txt. Reports go to eval_out/ (report.md, metrics.json, features.csv).
+
+Model validation (compare_models.py)
+-------------------------------------
+  python3 evaluate.py --data dataset --out eval_out          # extract features once (all installed models)
+  python3 compare_models.py --features eval_out/features.csv # per-model AUC, agreement, ensemble search
+  python3 compare_models.py --features eval_out/features.csv --keep <name> --apply
+      # disables the rest via models/<name>/DISABLED markers (nothing deleted; mlclassifier.py skips them)
+  Reports go to eval_out/model_comparison.md and model_comparison.json.
+
+C2PA setup (optional)
+----------------------
+  pip install c2pa-python   (also listed in requirements-ml.txt)
+  Three outcomes are reported, never collapsed into one: no manifest found / manifest present but INVALID (tampered after signing) / manifest present and VALID. A valid manifest is further split into trusted (signer chains to a known root) vs untrusted (e.g. self-issued certificate) -- an untrusted-but-valid manifest means 'unmodified since signing' only, not 'signed by someone you should trust'.
+
+External second opinions (optional; see second_opinion.py)
+------------------------------------------------------------------------------
+  pip install realitydefender python-dotenv   (also listed in requirements.txt /
+                                                requirements-ml.txt)
+  Copy .env.example to .env and fill in whichever keys you have (never commit .env).
+
+  Two different trust levels:
+  - Reality Defender + Sightengine (OPT-IN): the actual image is sent to their
+    cloud for an independent opinion. Only runs when the "Also check with
+    external services" checkbox is ticked at upload time; unticked (the
+    default), nothing leaves the machine, same as every other check in this
+    list. Reality Defender: 50 free image scans/month. Sightengine: free
+    trial credits.
+  - VirusTotal (AUTOMATIC): a SHA256 hash lookup only -- the file itself is
+    never uploaded -- so it runs on every upload, same as C2PA. Answers a
+    different question from the rest of this toolkit: is the file ITSELF
+    known malware, not whether its content is a deepfake. Free, no card.
+
+MediaPipe face model (optional)
+--------------------------------
+  pip install mediapipe   (also listed in requirements-ml.txt)
+  python3 get_facemesh.py               # downloads face_landmarker.task from Google (~4-6 MB, MIT)
+  python3 get_facemesh.py --selftest    # download + smoke-test it
+  Without this, the Haar-cascade detector is used automatically -- nothing else changes.
+  Detector in use is shown per-report as 'haar detector' or 'mediapipe detector'.
+
+ML setup (optional)
+-------------------
+  pip install -r requirements-ml.txt
+  python3 get_model.py --repo <hf-repo-id> --name mymodel --mode both
+  (or copy your own model.onnx into models/<name>/, see models/README.txt)
+  Open the 'ML Models' page to confirm labels and the fake-label mapping.
+
+Video support
+-------------
+  Upload MP4/MOV/AVI/MKV/WEBM/M4V directly from the same page as images (max 200 MB).
+  Blink-rate detection needs the MediaPipe face model (see 'MediaPipe face model' above).
+  Per-frame ML scoring needs at least one model installed (see 'Model validation' above).
+  Without either, the pulse and flicker signals alone still run.
+
+Learned combiner / calibration (optional, image AND video)
+-------------------------------------------------------------
+  python3 evaluate.py --data dataset --calibrate --apply         # images -> calibration.json
+  python3 evaluate_video.py --data video_dataset --calibrate --apply  # video -> video_calibration.json
+  Without either file, both pipelines use their original hand-tuned weights -- nothing else changes.
+  Every report's 'Score breakdown' card explains whichever mode is active for that verdict.
+
+Usage
+-----
+  bash install.sh
+  source venv/bin/activate
+  python3 app.py           # http://127.0.0.1:5001
+
+Environment variables: HOST (default 127.0.0.1), PORT (default 5001), FLASK_DEBUG=1 (dev only).
+
+Limitations
+-----------
+Scores are heuristic indicators, not proof. Social-media recompression, resizing and
+screenshots reduce reliability. Modern diffusion/face-swap output with stripped metadata
+can pass every check here. Use as triage and combine with expert review.
+
+Disclaimer
+----------
+For educational and professional use only.
+
+(c) 2025-2026 Gourav Shrivastava

@@ -1,0 +1,48 @@
+Dataset guide for evaluate.py   (Developed by Gourav Shrivastava)
+==================================================================
+
+Layout
+------
+dataset/
+  real/<source>/*.jpg      e.g. real/phone_a, real/dslr, real/ffhq_sample
+  fake/<generator>/*.png   e.g. fake/sd15, fake/midjourney, fake/faceswap_tool
+
+Sub-folders are optional but strongly recommended: the report gives recall per generator
+and false-positive rate per real source, which is where detectors usually fail.
+
+Size
+----
+- Minimum to run calibration: 60 images, 20 per class (the script refuses below that).
+- Useful: 200+ per class. Small sets give wide confidence intervals.
+- Include several generators, including ones released recently. Keep some generators
+  OUT of training/calibration in a separate folder and evaluate on them afterwards
+  (evaluate.py --data heldout_dataset). That is the honest generalisation test.
+
+Avoid the classic mistakes (the report warns about the first three)
+------------------------------------------------------------------
+1. Format bias   : real = JPEG, fake = PNG. The engine then learns the format.
+                   Fix: give both classes the same format, or run with --normalize.
+2. Resolution    : fakes at 512px, reals at 4000px. Resize both to a similar range.
+3. EXIF bias     : reals keep EXIF, fakes have none. Strip EXIF from both or use --normalize.
+4. Duplicates    : the same picture (or crops/resizes of it) in both classes or repeated.
+                   Exact duplicates are removed automatically; near-duplicates are not.
+5. Content bias  : all reals are outdoor scenes, all fakes are portraits. Match subject matter.
+6. Cleaned fakes : fakes that were never re-saved vs real photos that went through social media.
+                   Real-world images are recompressed. Include recompressed fakes too.
+
+Where to get images (from memory: verify current availability and licences yourself)
+------------------------------------------------------------------------------------
+- Real faces      : FFHQ subset, CelebA, your own photos (with consent).
+- Face-swap fakes : FaceForensics++, Celeb-DF, DFDC (some need an access request form).
+- AI-image fakes  : CIFAKE, GenImage, "real vs fake faces" sets on Kaggle.
+- Your own fakes  : generate with free local tools (Stable Diffusion variants, face-swap tools)
+                    and pair with real photos of similar content.
+- Check each dataset's licence and terms. Do not include images of people without a lawful basis.
+
+Workflow
+--------
+1. python3 evaluate.py --data dataset                 # baseline, read report.md
+2. python3 evaluate.py --data dataset --normalize     # is the result format-independent?
+3. python3 evaluate.py --data dataset --reuse --apply # calibrate + activate in the app
+4. python3 evaluate.py --data heldout_dataset         # test on generators never used for calibration
+   (delete calibration.json or run --reset-calibration to compare against the raw heuristic)

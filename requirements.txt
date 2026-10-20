@@ -1,0 +1,16 @@
+Flask>=3.0
+Pillow>=10.3
+imagehash>=4.3.1
+ExifRead>=3.0.0
+opencv-python-headless>=4.9
+numpy>=1.26
+matplotlib>=3.7
+requests>=2.31
+
+# Loads REALITY_DEFENDER_API_KEY (and any other secrets) from a local .env file so they
+# never get hardcoded into source. See .env.example.
+python-dotenv>=1.0
+
+# Only needed to run `python3 evaluate_video.py --selftest` (builds a synthetic test video
+# from a real face). Not used by the app itself -- skip this if you never run that command.
+scikit-image>=0.22

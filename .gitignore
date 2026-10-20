@@ -1,0 +1,61 @@
+# Secrets
+.env
+.env.*
+*.env
+!.env.example
+*.pem
+*.key
+*.p12
+credentials.json
+kaggle.json
+service-account*.json
+secrets/
+
+# Python environments
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Data and generated outputs
+data/
+datasets/
+uploads/
+temp/
+data/reports/
+eval_out/
+eval_video_out/
+output/
+outputs/
+results/
+*.log
+
+# Test media (large, real people's faces)
+*.mp4
+*.avi
+*.mov
+*.mkv
+
+# Large models
+*.onnx
+*.task
+*.pt
+*.pth
+*.safetensors
+*.h5
+*.ckpt
+
+# Archives
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+
+# Editor
+.vscode/
+.idea/models/community_forensics/
