@@ -281,9 +281,9 @@ ForensiX is intended for **learning, cybersecurity research, digital-media analy
 
 ## 👤 Author
 
-**Gourav Shrivastava**
-B.Tech, Cyber Security, Sagar Institute of Research and Technology (SIRT), Bhopal
-Internship: State Cyber Cell
+**Gourav Shrivastava | Cyber Security Enthusiast**
+
+Cyber Security | SOC Analysis | Network Security | Digital Forensics
 
 [![GitHub](https://img.shields.io/badge/GitHub-gourav001--s-181717?style=flat-square&logo=github)](https://github.com/gourav001-s)
 
